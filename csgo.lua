@@ -29,32 +29,30 @@ Text = "Alert!, Use some buttons on spawn (every time you spawn)",
 Color = Color3.fromRGB(124, 92, 70)
 })
 
-function wsss()
-local Players = game:GetService("Players")
-local client = Players.LocalPlayer
-
-local character
-client.CharacterAdded:Connect(function(_character)
-    character = _character
-    character.Humanoid.Died:Connect(function()
-    wait(1)
+function acbypass()
 game.Players.LocalPlayer.Character:FindFirstChild("LocalScript"):Destroy()
-end)
-end)
 end
 
-function jppp()
-local Players = game:GetService("Players")
-local client = Players.LocalPlayer
+function camp()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(57.990715, 472.297119, 507.656403)
+end
 
-local character
-client.CharacterAdded:Connect(function(_character)
-    character = _character
-    character.Humanoid.Died:Connect(function()
-    wait(1)
-game.Players.LocalPlayer.Character:FindFirstChild("LocalScript"):Destroy()
-end)
-end)
+function all()
+for i,v in pairs(game.Players:GetChildren()) do
+if v.Name ~= game.Players.LocalPlayer.Name then
+v.Character.Head.Anchored = true
+v.Character.Head.CFrame = game.Players.LocalPlayer.Character.Head.CFrame*CFrame.new(0,0,-5)
+end
+end
+
+wait()
+while wait() do
+for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+v.Character.Head.CanCollide = false
+v.Character.Head.Size = Vector3.new(5, 5, 5)
+v.Character.Head.Transparency = 0
+end
+end
 end
 
 function flyy()
@@ -250,7 +248,7 @@ RunService.Stepped:Connect(function()
   start()
 end
 
-function espthing()
+function highlight()
 --//Toggle\\--
 getgenv().Toggle = true -- This toggles the esp, turning it to false will turn it off
 getgenv().TC = false -- This toggles team check, turning it on will turn on team check
@@ -383,6 +381,53 @@ while task.wait() do
 end
 end
 
+function espalso()
+local Players = game:GetService("Players"):GetChildren()
+local RunService = game:GetService("RunService")
+local highlight = Instance.new("Highlight")
+highlight.Name = "Highlight"
+
+for i, v in pairs(Players) do
+repeat wait() until v.Character
+if not v.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
+local highlightClone = highlight:Clone()
+highlightClone.Adornee = v.Character
+highlightClone.Parent = v.Character:FindFirstChild("HumanoidRootPart")
+highlightClone.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+highlightClone.Name = "Highlight"
+end
+end
+
+game.Players.PlayerAdded:Connect(function(player)
+   repeat task.wait() until player.Character
+   if not player.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
+   local highlightClone = highlight:Clone()
+   highlightClone.Adornee = player.Character
+   highlightClone.Parent = player.Character:FindFirstChild("HumanoidRootPart")
+   highlightClone.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+   highlightClone.Name = "Highlight"
+   end
+end)
+
+game.Players.PlayerRemoving:Connect(function(playerRemoved)
+    playerRemoved.Character:FindFirstChild("HumanoidRootPart").Highlight:Destroy()
+end)
+
+RunService.Heartbeat:Connect(function()
+for i, v in pairs(Players) do
+repeat wait() until v.Character
+if not v.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("Highlight") then
+local highlightClone = highlight:Clone()
+highlightClone.Adornee = v.Character
+highlightClone.Parent = v.Character:FindFirstChild("HumanoidRootPart")
+highlightClone.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+highlightClone.Name = "Highlight"
+task.wait()
+end
+end
+end)
+end
+
 function noclip()
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -406,7 +451,7 @@ end
 
 Rage:AddTextbox({
 Name = "FOV Changer",
-Default = "FOV To Be?",
+Default = "Number",
 TextDisappear = false,
 Callback = function(fov)
 local args = {
@@ -417,23 +462,9 @@ game:GetService("ReplicatedStorage").Events.ChangeFOV:FireServer(unpack(args))
 end})
 
 Main:AddButton({
-Name = "Names",
+Name = "Highlight ESP",
 Callback = function()
-espthing()
-end})
-
-Main:AddToggle({
-Name = "Tracers",
-Default = false,
-Callback = function(tra)
-if tra then
-_G.trac = true
-if _G.trac == true then
-loadstring(game:HttpGet(('https://raw.githubusercontent.com/dudeididntliterally/OpenSourceESPStuff/main/Tracers.lua'),true))()
-end
-else
-_G.trac = false
-end
+highlight()
 end})
 
 Main:AddButton({
@@ -445,23 +476,32 @@ end})
 Rage:AddButton({
 Name = "AC Bypass (anticheat)",
 Callback = function()
-bypass()
+acbypass()
 end})
 
 Rage:AddButton({
-	Name = "(BYPASS FIRST) WalkSpeed",
-	Callback = function()
-    wsss()
-end})
-
-Rage:AddButton({
-	Name = "(BYPASS FIRST) JumpPower",
-	Callback = function()
-	jppp()
-end})
-
-Rage:AddButton({
-Name = "Fly",
-Callback = function(flyyy)
+Name = "Fly (kinda broken)",
+Callback = function()
+OrionLib:MakeNotification({
+	Name = "Fly Alert!",
+	Content = "This Fly Is Kind Of Broken On Spawn (if you die press it 2 times on spawn)",
+	Image = "rbxassetid://4483345998",
+	Time = 15
+})
+wait()
 flyy()
+end})
+
+Main:AddButton({
+Name = "Bring All Heads",
+Callback = function()
+all()
+end})
+
+Main:AddButton({
+Name = "(NOCLIP) Best Camp Spot (wall)",
+Callback = function()
+noclip()
+wait()
+camp()
 end})
